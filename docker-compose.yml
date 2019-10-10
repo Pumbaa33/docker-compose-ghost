@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      ghost-network:
+        aliases:
+          - mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=ghost
+      - MYSQL_DATABASE=ghost
+      - MYSQL_USER=ghost
+      - MYSQL_PASSWORD=ghost
+  nginx:
+    image: nginx:latest
+    restart: always
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/ssl/xxx.key:/etc/nginx/xxx.key
+      - ./nginx/ssl/xxx.crt:/etc/nginx/xxx.crt
+      - ./nginx/config/conf.d:/etc/nginx/conf.d
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/log:/var/log/nginx
+    networks:
+      ghost-network:
+        aliases:
+          - nginx
+  ghost:
+    image: ghost:latest
+    restart: always
+    container_name: ghost
+    depends_on:
+      - mysql
+      - nginx
+    expose:
+      - "2368"
+    volumes:
+      - ./ghost/config/config.production.json:/var/lib/ghost/config.production.json
+      - ./ghost/content:/var/lib/ghost/content
+    networks:
+      ghost:network:
+        aliases:
+          - ghost    
+
+networks:
+  ghost-network:

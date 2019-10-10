@@ -1,0 +1,31 @@
+{
+    "url": "http://www.xxx.com",
+    "server": {
+        "port": 2368,
+        "host": "0.0.0.0"
+    },
+    "database": {
+        "client": "mysql",
+        "connection": {
+            "host": "mysql",
+            "port": 3306,
+            "user": "ghost",
+            "password": "ghost",
+            "database": "ghost",
+            "charset": "utf8mb4"
+        }
+    },
+    "mail": {
+        "transport": "Direct"
+    },
+    "logging": {
+        "transports": [
+            "file",
+            "stdout"
+        ]
+    },
+    "process": "systemd",
+    "paths": {
+        "contentPath": "/var/lib/ghost/content"
+    }
+}
